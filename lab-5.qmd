@@ -48,17 +48,24 @@ $$
 
 a.  Another researcher is interested in assessing the relationship between babies’ weights and mothers’ ages. Fit another linear model to investigate this relationship. Provide the summary output below.
 
+```{r}
+lin_model2 <- lm(weight~mage, data=births14_habitgiven)
+tidy(lin_model2)
+```
+
 b.  In 2-3 sentences, explain how the regression line to model these data is fit, i.e., based on what criteria R determines the regression line.
+
+R finds values of the intercept and slope that minimize the sum of squared residuals. R fits the regression line that makes the least amount of prediction errors. The line through the data should be as close to as many points as possible.  
 
 c.  Interpret the intercept in the context of the data and the research question. Is the intercept meaningful in this context? Why or why not?
 
+The intercept of 6.78 represents the baby's weight when the mother is 0 years old. The intercept in not meaningful because it is outside the observed ranges of what the mothers age would be. No mother is 0 years old. 
+
 d.  Interpret the slope in the context of the data and the research question.
 
+The slope suggests that for every year of the mother's age the baby's weight will increase by 0.015 on average. This relationship is significant. 
+
 # Part 2 - Parasites
-
-Parasites can cause infectious disease – but not all animals are affected by the same parasites. Some parasites are present in a multitude of species and others are confined to a single host. It is hypothesized that closely related hosts are more likely to share the same parasites. More specifically, it is thought that closely related hosts will live in similar environments and have similar genetic makeup that coincides with optimal conditions for the same parasite to flourish.
-
-In this part of the lab, we will see how much evolutionary history predicts parasite similarity.
 
 The dataset comes from an Ecology Letters paper by Cooper at al. (2012) entitled “Phylogenetic host specificity and understanding parasite sharing in primates” located [here](https://onlinelibrary.wiley.com/doi/10.1111/j.1461-0248.2012.01858.x). The goal of the paper was to identify the ability of evolutionary history and ecological traits to characterize parasite host specificity.
 
@@ -84,11 +91,26 @@ Let’s start by reading in the `parasites` data and examining the relationship 
 
 a.  Load the data and save the data frame as `parasites`.
 
+```{r}
+parasites <- read.csv("data/parasites.csv")
+```
+
 b.  Based on the goals of the analysis, what is the response variable?
+
+The response variable is going to be "parsim". 
 
 c.  Visualize the relationship between the two variables.
 
+```{r}
+ggplot(parasites, aes(x=divergence_time, y=parsim)) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  labs(x="Divergence time (millions of years)", y= "Parasite similarity")
+```
+
 d.  Use the visualization to describe the relationship between the two variables.
+
+The data suggests that as divergence time continues parasite similarity decreases. Also, the similarity become more uniform and less scattered. 
 
 ## Question 4
 
