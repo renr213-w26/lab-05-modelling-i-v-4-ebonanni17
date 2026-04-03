@@ -1,47 +1,48 @@
 ---
 title: "Lab 5 - Modelling I"
+author: Emily Bonanni
+date: April 3, 2026
+format: pdf
 categories: "Lab"
 ---
 
-# Introduction
-
-In this lab you'll start your practice of statistical modelling. You'll fit models, interpret model output, and make decisions about your data and research question based on the model results.
-
-## Guidelines
-
-Your plots should include an informative title, axes should be labeled, and careful consideration should be given to aesthetic choices.
-
-In addition, the code should all the code should be be able to be read (not run off the page) when you render to PDF. Make sure that is the case, and add line breaks where the code is running off the page.
-
-::: callout-important
-Render your document. If your code is running off the page for a given question such that we can’t see your entire code, we will not evaluate any of the code for that question. The question will automatically receive a 0. This is something you can and should verify before you turn in your work.
-:::
-
-You should have at least 3 commits with meaningful commit messages by the end of the assignment.
-
-Additionally, if you’re using functions that are not introduced in the course materials, you must cite your sources.
-
-::: callout-important
-Failure to cite outside resources used, including Large Language Models like Chat GPT, is a violation of the Duke Community Standard and will be treated as such.
-:::
+```{r}
+library(openintro)
+library(tidyverse)
+library(broom)
+```
 
 # Part 1 - Smoking during pregnancy
 
 ## Question 1
 
-We are interested in the impact of smoking during pregnancy. Since it is not possible to run a randomized controlled experiment to investigate this impact, we will instead use a data set has been of interest to medical researchers who are studying the relation between habits and practices of expectant mothers and the birth of their children. This is a random sample of 1,000 cases from a data set released in 2014 by the state of North Carolina. The data set is called `births14`, and it is included in the **openintro** package you loaded at the beginning of the assignment.
-
 a.  Create a version of the `births14` data set dropping observations where there are `NA`s for `habit`. You can call this version `births14_habitgiven`.
+
+```{r}
+births14_habitgiven <- births14 %>%
+  filter(!is.na(habit))
+```
 
 b.  Plotting the data is a useful first step because it helps us quickly visualize trends, identify strong associations, and develop research questions. Create an appropriate plot displaying the relationship between `weight` and `habit`. In 2-3 sentences, discuss the relationships observed.
 
+```{r}
+ggplot(births14_habitgiven, aes(x=habit, y=weight)) +
+  geom_boxplot() + labs(x="Habit", y="Weight")
+```
+This data suggests that birth weight is higher in babies whose mothers did not smoke during pregnancy compared to mothers who did smoke. 
+
 c.  Now, fit a linear model that predicts `weight` from `habit`. Provide the tidy summary output below.
+
+```{r}
+lin_model <- lm(weight~habit, data=births14_habitgiven)
+tidy(lin_model)
+```
 
 d.  Write the estimated least squares regression line below using proper notation.
 
-    ::: callout-tip
-    If you need to type an equation using proper notation, type your answers in-between `$$` and `$$`. You may use `\hat{example}` to put a hat on a character.
-    :::
+$$
+\hat{weight}= 7.2698731-0.5926801 \cdot habit_{smoker}
+$$
 
 ## Question 2
 
@@ -221,11 +222,6 @@ Then, write a paragraph (4-5 sentences) addressing the following:
 
 Once you are finished with the lab, you will submit your final PDF document to Canvas.
 
-::: callout-warning
-Before you wrap up the assignment, make sure all of your documents are updated on your GitHub repo. We will be checking these to make sure you have been practicing how to commit and push changes.
-
-You must turn in a PDF file to the Canvas page by the submission deadline to be considered "on time".
-:::
 
 To submit your assignment:
 
@@ -234,31 +230,3 @@ To submit your assignment:
 -   Click on your *REN R 213* course.
 -   Click on the assignment, and you'll be prompted to submit it.
 -   Mark all the pages associated with question. All the pages of your lab should be associated with at least one question (i.e., should be "checked").
-
-::: callout-important
-## Checklist
-
-Make sure you have:
-
--   attempted all questions
--   rendered your Quarto document
--   committed and pushed everything to your GitHub repository such that the Git pane in RStudio is empty
--   uploaded your PDF to Canvas
--   selected pages associated with each question on Canvas
-:::
-
-## Grading
-
-The lab is graded out of a total of 4 points.
-
-You can earn up to 4 points on each question:
-
--   4: Response shows excellent understanding and addresses all or almost all of the rubric items.
-
--   3: Response shows good understanding and addresses most of the rubric items.
-
--   2: Response shows understanding and addresses a majority of the rubric items.
-
--   1: Response shows effort and misses many of the rubric items.
-
--   0: Response does not show sufficient effort or understanding and/or is largely incomplete.
